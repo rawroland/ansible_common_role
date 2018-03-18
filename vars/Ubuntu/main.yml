@@ -1,0 +1,6 @@
+---
+
+set_timezone: timedatectl set-timezone {{ timezone }}
+disable_timedatectl: timedatectl set-ntp no
+change_shell_command: chsh -s /usr/bin/zsh {{ deployer }}
+check_curl_version: /usr/bin/curl --version | grep --only-matching {{ curl_version }}

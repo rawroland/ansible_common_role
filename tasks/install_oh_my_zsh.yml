@@ -1,0 +1,12 @@
+- name: Ensure that oh my zsh is installed
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  become: yes
+  become_user: root
+
+- name: Ensure that zsh is the default shell for the deployer
+  shell: "{{ change_shell_command }}"
+
+- name: Ensure that the  zsh default config is setup
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  become: yes
+  become_user: "{{ deployer }}"

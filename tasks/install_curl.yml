@@ -1,0 +1,44 @@
+- name: Check cURL
+  shell: "{{ check_curl_version }}"
+  register: installed_curl_version
+  ignore_errors: yes
+
+- name: Register installed version check variable
+  set_fact:
+    install_new_curl: "{{installed_curl_version.rc == 1 or (installed_curl_version.rc == 0 and installed_curl_version.stdout_lines.0 != curl_version)}}"
+
+- include_tasks: "{{ ansible_distribution }}/install_curl_build_dependencies.yml"
+  when: install_new_curl == true
+
+- name: Ensure that the temp directory for making curl exists
+  file:
+    path: "/tmp/curl"
+    mode: u=rwx,g=rwx,o=rwx
+    state: directory
+  when: install_new_curl == true
+
+- name: Download the latest libcurl
+  get_url:
+    url: "https://curl.haxx.se/download/curl-{{ curl_version }}.tar.gz"
+    dest: "/tmp/curl/curl.tar.gz"
+    mode: u=rw,g=rw
+  when: install_new_curl == true
+
+- name: Extract curl
+  unarchive:
+    src: "/tmp/curl/curl.tar.gz"
+    dest: "/tmp/curl"
+  when: install_new_curl == true
+
+- name: Compile curl
+  command: "{{ item }}"
+  args:
+    chdir: "/tmp/curl/curl-{{ curl_version }}"
+  with_items:
+    - ./configure
+    - make
+    - make install
+  when: install_new_curl == true
+
+- name: Ensure that no C-level lib issues exist
+  shell: ldconfig

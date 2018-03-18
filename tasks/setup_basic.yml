@@ -1,0 +1,21 @@
+- name: Ensure that basic packages are installed
+  package: name="{{ item }}" state=present
+  with_items:
+    - ntp
+    - vim
+    - git
+    - zsh
+    - ufw
+    - htop
+    - wget
+    - unzip
+    - mlocate
+    - libssl-dev
+    - build-essential
+    - python-software-properties
+
+- name: Ensure that the timezone is set
+  command: "{{ set_timezone }}"
+
+- name: Ensure that timedatectl is off
+  command: "{{ disable_timedatectl }}"

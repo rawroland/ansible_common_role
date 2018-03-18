@@ -1,0 +1,20 @@
+- name: Ensure that source URIs are present in the sources.list
+  replace:
+    path: /etc/apt/sources.list
+    regexp: "{{ item.search }}"
+    replace: "{{ item.replace }}"
+    backup: yes
+  with_items:
+    - search: '#deb-src'
+      replace: 'deb-src'
+    - search: '# deb-src'
+      replace: 'deb-src'
+
+#sudo sed -i -- 's/#deb-src/deb-src/g' /etc/apt/sources.list && sudo sed -i -- 's/# deb-src/deb-src/g' /etc/apt/sources.list
+
+
+- name: Ensure that curl build dependencies are installed
+  apt:
+    name: curl
+    state: build-dep
+    update_cache: yes
