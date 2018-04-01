@@ -1,6 +1,6 @@
 ---
 
-- include_vars: "common_{{ fl_environment }}.yml"
+- include_vars: "{{ env }}.yml"
 - include_vars: "{{ ansible_distribution }}/main.yml"
 - include_tasks: setup_basic.yml
 - include_tasks: install_oh_my_zsh.yml
