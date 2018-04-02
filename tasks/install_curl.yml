@@ -2,6 +2,8 @@
   shell: "{{ check_curl_version }}"
   register: installed_curl_version
   ignore_errors: yes
+  args:
+    warn: false
 
 - name: Register installed version check variable
   set_fact:
