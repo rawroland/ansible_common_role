@@ -12,7 +12,7 @@
     - mlocate
     - libssl-dev
     - build-essential
-    - python-software-properties
+    - software-properties-common
 
 - name: Ensure that the timezone is set
   command: "{{ set_timezone }}"
