@@ -1,12 +1,13 @@
-- name: Ensure that oh my zsh is installed
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  become: yes
-  become_user: root
-
-- name: Ensure that zsh is the default shell for the deployer
-  shell: "{{ change_shell_command }}"
+- name: Check if oh my zsh is installed
+  stat:
+    path: "/home/{{ deployer }}/.oh-my-zsh"
+  register: oh_my_zsh
 
 - name: Ensure that the  zsh default config is setup
   shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   become: yes
   become_user: "{{ deployer }}"
+  when: "oh_my_zsh.stat.isdir is not defined"
+
+- name: Ensure that zsh is the default shell for the deployer
+  shell: "{{ change_shell_command }}"
